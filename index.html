@@ -1,0 +1,130 @@
+<html lang="id" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kalkulator Cicilan KTA iB Multiguna Bank Permata X Muslim101</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+  />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #121212;
+      color: #d4af37;
+    }
+    /* Custom scrollbar for dark theme */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #1e1e1e;
+    }
+    ::-webkit-scrollbar-thumb {
+      background-color: #d4af37;
+      border-radius: 10px;
+      border: 2px solid #1e1e1e;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-6">
+  <main class="bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-3xl shadow-2xl max-w-md w-full p-8 border-4 border-yellow-600">
+    <h1 class="text-3xl font-extrabold text-center mb-8 text-yellow-400 drop-shadow-lg">
+      Kalkulator Cicilan KTA iB Multiguna Bank Permata X Muslim101
+    </h1>
+    <form id="loanForm" class="space-y-7">
+      <div>
+        <label for="nominal" class="block text-yellow-300 font-semibold mb-2 text-lg"
+          >Masukkan Nominal Pinjaman (Rp)</label
+        >
+        <input
+          type="number"
+          id="nominal"
+          name="nominal"
+          min="1"
+          placeholder="Contoh: 1000000"
+          required
+          class="w-full rounded-lg border border-yellow-600 bg-gray-900 text-yellow-300 placeholder-yellow-500 px-5 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+        />
+      </div>
+      <div>
+        <label for="tenor" class="block text-yellow-300 font-semibold mb-2 text-lg"
+          >Pilih Tenor Cicilan</label
+        >
+        <select
+          id="tenor"
+          name="tenor"
+          required
+          class="w-full rounded-lg border border-yellow-600 bg-gray-900 text-yellow-300 px-5 py-3 focus:outline-none focus:ring-2 focus:ring-yellow-500 focus:border-yellow-500 transition"
+        >
+          <option value="" disabled selected class="text-gray-500">Pilih tenor</option>
+          <option value="12" class="bg-gray-900 text-yellow-300">12 Bulan</option>
+          <option value="24" class="bg-gray-900 text-yellow-300">24 Bulan</option>
+          <option value="36" class="bg-gray-900 text-yellow-300">36 Bulan</option>
+        </select>
+      </div>
+      <button
+        type="submit"
+        class="w-full bg-yellow-600 hover:bg-yellow-700 text-gray-900 font-bold py-3 rounded-lg transition-colors duration-300 flex items-center justify-center shadow-lg"
+      >
+        <i class="fas fa-calculator mr-3 text-gray-900"></i> Hitung Cicilan
+      </button>
+    </form>
+    <section
+      id="resultSection"
+      class="mt-8 p-5 bg-gradient-to-r from-yellow-900 via-yellow-800 to-yellow-900 rounded-xl border border-yellow-500 hidden"
+      aria-live="polite"
+    >
+      <p class="text-yellow-100 font-semibold text-center text-xl drop-shadow-md" id="resultText"></p>
+    </section>
+  </main>
+
+  <script>
+    const form = document.getElementById('loanForm');
+    const resultSection = document.getElementById('resultSection');
+    const resultText = document.getElementById('resultText');
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+
+      const nominalInput = document.getElementById('nominal').value.trim();
+      const tenorInput = document.getElementById('tenor').value;
+
+      const nominal = Number(nominalInput);
+      const tenor = Number(tenorInput);
+
+      if (!nominal || nominal <= 0) {
+        alert('Mohon masukkan nominal pinjaman yang valid lebih dari 0.');
+        return;
+      }
+      if (![12, 24, 36].includes(tenor)) {
+        alert('Mohon pilih tenor cicilan yang valid.');
+        return;
+      }
+
+      // Rumus: cicilan = (X / tenor) + (X * 1.39%)
+      const interestRate = 0.0139;
+      const cicilan = nominal / tenor + nominal * interestRate;
+
+      // Format rupiah
+      const formatter = new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+      });
+
+      resultText.textContent = `Cicilan per bulan untuk pinjaman ${formatter.format(
+        nominal
+      )} dengan tenor ${tenor} bulan adalah ${formatter.format(cicilan)}.`;
+
+      resultSection.classList.remove('hidden');
+      resultSection.scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
